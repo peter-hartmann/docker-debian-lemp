@@ -18,6 +18,11 @@ service mysql start
 # workaround https://serverfault.com/a/480890
 mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY '`sed -n '/user *= *debian-sys-main/{n;s/password *= *//;x};${x;p}' /etc/mysql/debian.cnf`';FLUSH PRIVILEGES;"
 
+echo "###### Starting Postfix"
+# workaround https://linuxconfig.org/fatal-the-postfix-mail-system-is-already-running-solution
+rm -f /var/spool/postfix/pid/master.pid
+/usr/sbin/postfix start
+
 echo "###### Start php-fpm"
 service php7.1-fpm start
 

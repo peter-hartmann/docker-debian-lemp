@@ -14,7 +14,7 @@ Don't use it in a product environment.
     git clone https://github.com/peter-hartmann/docker-debian-lemp.git
     docker build -t peterhartmann/debian-lemp docker-debian-lemp/
     docker run -it --rm --name lemp -v $(pwd)/www/html:/var/www/html -v $(pwd)/lib/mysql:/var/lib/mysql -v $(pwd)/backup:/backup/ -e TZ=America/Chicago peterhartmann/debian-lemp
-    docker run -dt --name lemp -v $(pwd)/www/html:/var/www/html -v $(pwd)/lib/mysql:/var/lib/mysql -v $(pwd)/backup:/backup/ -e TZ=America/Chicago peterhartmann/debian-lemp
+    docker run -dt --restart=always --name lemp -v $(pwd)/www/html:/var/www/html -v $(pwd)/lib/mysql:/var/lib/mysql -v $(pwd)/backup:/backup/ -e TZ=America/Chicago peterhartmann/debian-lemp
     docker exec -it lemp bash
 
 # Detail

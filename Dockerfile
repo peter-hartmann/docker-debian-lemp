@@ -46,4 +46,4 @@ VOLUME ["/var/www/", "/var/lib/mysql/", "/backup/"]
 
 EXPOSE 80
 
-ENTRYPOINT /usr/sbin/entrypoint.sh && bash
+ENTRYPOINT /usr/sbin/entrypoint.sh && tail -f /dev/null

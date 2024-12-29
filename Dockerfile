@@ -1,12 +1,11 @@
-FROM debian:jessie
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
 ## Install php
 RUN apt-get update -qq && apt-get upgrade -y && \
-    apt-get install -y wget apt-transport-https lsb-release ca-certificates && \
-    wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
-    echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository -y ppa:ondrej/php && \
     apt-get update -qq && \
     apt-get install -y php7.1-fpm php7.1-mysql php7.1-gd php7.1-mcrypt php7.1-mysql php7.1-curl php7.1-mbstring php7.1-xml
 
@@ -38,7 +37,7 @@ RUN chmod 1777 /tmp && \
 RUN postmap /etc/postfix/sasl/sasl_passwd && \
     chown root:root /etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db && \
     chmod 0600      /etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db && \
-    cp /etc/resolv.conf /var/spool/postfix/etc/resolv.conf #https://ubuntuforums.org/showthread.php?t=2213546 
+    cp /etc/resolv.conf /var/spool/postfix/etc/resolv.conf #https://ubuntuforums.org/showthread.php?t=2213546
 
 WORKDIR /var/www/html
 

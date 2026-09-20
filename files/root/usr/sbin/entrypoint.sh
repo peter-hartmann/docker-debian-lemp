@@ -24,7 +24,7 @@ rm -f /var/spool/postfix/pid/master.pid
 /usr/sbin/postfix start
 
 echo "###### Start php-fpm"
-service php7.1-fpm start
+service php7.4-fpm start
 
 echo "###### Start nginx"
 service nginx start

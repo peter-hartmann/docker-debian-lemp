@@ -7,7 +7,7 @@ RUN apt-get update -qq && apt-get upgrade -y && \
     apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:ondrej/php && \
     apt-get update -qq && \
-    apt-get install -y php7.1-fpm php7.1-mysql php7.1-gd php7.1-mcrypt php7.1-mysql php7.1-curl php7.1-mbstring php7.1-xml
+    apt-get install -y php7.4-fpm php7.4-mysql php7.4-gd php7.4-curl php7.4-mbstring php7.4-xml
 
 ## Install more
 RUN apt-get install -y nginx \
@@ -30,9 +30,18 @@ COPY files/root /
 
 ## Cleanup and Configuration
 RUN chmod 1777 /tmp && \
-    sed -i 's/^listen\s*=.*$/listen = 127.0.0.1:9000/' /etc/php/7.1/fpm/pool.d/www.conf && \
-    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/var\/log\/php\/cgi.log/' /etc/php/7.1/fpm/php.ini && \
-    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/var\/log\/php\/cli.log/' /etc/php/7.1/cli/php.ini
+    sed -i 's/^listen\s*=.*$/listen = 127.0.0.1:9000/' /etc/php/7.4/fpm/pool.d/www.conf && \
+    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/var\/log\/php\/cgi.log/' /etc/php/7.4/fpm/php.ini && \
+    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/var\/log\/php\/cli.log/' /etc/php/7.4/cli/php.ini && \
+    printf '%s\n' \
+        'pm.max_children = 300' \
+        'pm.start_servers = 40' \
+        'pm.min_spare_servers = 40' \
+        'pm.max_spare_servers = 40' \
+        'pm.status_path = /fpm123-status' \
+        'ping.path = /ping123' \
+        >> /etc/php/7.4/fpm/pool.d/www.conf
+
 
 RUN postmap /etc/postfix/sasl/sasl_passwd && \
     chown root:root /etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db && \

@@ -1,38 +1,50 @@
 server {
     listen 80;
-
-    index index.php;
-
+    server_name _;
     root /var/www/html;
-    charset utf8;
+    index index.php index.html;
+    charset utf-8;
+
+    gzip on;
 
     location / {
-        index index.php index.html;
-        
-        gzip on;
-        try_files $uri/index.php $uri /index.php;
-
-        if (!-f $request_filename) {
-            rewrite (.*) /index.php;
-        }
-
+        try_files $uri $uri/ /index.php?$query_string;
     }
 
-    location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$ {
-        expires      30d;
-        gzip on;
+    # Static files
+    location ~* \.(gif|jpg|jpeg|png|bmp|swf)$ {
+        expires 30d;
+        access_log off;
     }
 
-    location ~ .*\.(js|css)?$ {
-        expires      1h;
-
+    location ~* \.(js|css)$ {
+        expires 1h;
+        access_log off;
     }
 
-    # php fastcgi setting
+    # PHP
     location ~ \.php$ {
+        try_files $uri =404;
         fastcgi_pass 127.0.0.1:9000;
         fastcgi_index index.php;
-        fastcgi_param  SCRIPT_FILENAME  /$document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
+    }
+
+    # PHP-FPM status
+    location = /fpm123-status {
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME /fpm-status;
+        fastcgi_pass 127.0.0.1:9000;
+        # allow 127.0.0.1;
+        # deny all;
+    }
+
+    location = /ping123 {
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME /ping;
+        fastcgi_pass 127.0.0.1:9000;
+        # allow 127.0.0.1;
+        # deny all;
     }
 }

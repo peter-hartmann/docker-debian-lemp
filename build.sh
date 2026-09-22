@@ -22,8 +22,8 @@ IMAGE_NAME="peter-hartmann/ubuntu-lemp"
 
 # Intended/pinned versions -- update these when the Dockerfile's PHP or
 # MariaDB package selection changes to a new major.minor.
-PHP_VERSION="7.4"
-MARIADB_VERSION="10.3"
+PHP_VERSION="8.2"
+MARIADB_VERSION="10.11"
 
 VERSION_TAG="php${PHP_VERSION}-mariadb${MARIADB_VERSION}"
 GIT_SHA="$(git rev-parse --short HEAD 2>/dev/null || echo "nogit")"

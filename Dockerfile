@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -7,7 +7,7 @@ RUN apt-get update -qq && apt-get upgrade -y && \
     apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:ondrej/php && \
     apt-get update -qq && \
-    apt-get install -y php7.4-fpm php7.4-mysql php7.4-gd php7.4-curl php7.4-mbstring php7.4-xml
+    apt-get install -y php8.2-fpm php8.2-mysql php8.2-gd php8.2-curl php8.2-mbstring php8.2-xml
 
 ## Install more
 RUN apt-get install -y nginx \
@@ -30,9 +30,9 @@ COPY files/root /
 
 ## Cleanup and Configuration
 RUN chmod 1777 /tmp && \
-    sed -i 's/^listen\s*=.*$/listen = 127.0.0.1:9000/' /etc/php/7.4/fpm/pool.d/www.conf && \
-    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/var\/log\/php\/cgi.log/' /etc/php/7.4/fpm/php.ini && \
-    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/var\/log\/php\/cli.log/' /etc/php/7.4/cli/php.ini && \
+    sed -i 's/^listen\s*=.*$/listen = 127.0.0.1:9000/' /etc/php/8.2/fpm/pool.d/www.conf && \
+    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/var\/log\/php\/cgi.log/' /etc/php/8.2/fpm/php.ini && \
+    sed -i 's/^\;error_log\s*=\s*syslog\s*$/error_log = \/var\/log\/php\/cli.log/' /etc/php/8.2/cli/php.ini && \
     printf '%s\n' \
         'pm.max_children = 300' \
         'pm.start_servers = 40' \
@@ -40,7 +40,7 @@ RUN chmod 1777 /tmp && \
         'pm.max_spare_servers = 40' \
         'pm.status_path = /fpm123-status' \
         'ping.path = /ping123' \
-        >> /etc/php/7.4/fpm/pool.d/www.conf
+        >> /etc/php/8.2/fpm/pool.d/www.conf
 
 
 RUN postmap /etc/postfix/sasl/sasl_passwd && \

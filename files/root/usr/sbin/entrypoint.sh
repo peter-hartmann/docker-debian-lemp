@@ -9,12 +9,12 @@ if [ -d "/var/log/mysql" ]; then chown -R mysql:mysql /var/log/mysql/; fi #ensur
 if [ $(find /var/lib/mysql -maxdepth 0 -type d -empty 2>/dev/null) ]; then
     echo "###### Initializing MariaDB data dir - it was empty"
     mysql_install_db
-    service mysql start
+    service mariadb start
     mysql-secure-init.sh
 fi
 
 echo "###### Starting MariaDB"
-service mysql start
+service mariadb start
 # # workaround https://serverfault.com/a/480890
 # mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY '`sed -n '/user *= *debian-sys-main/{n;s/password *= *//;x};${x;p}' /etc/mysql/debian.cnf`';FLUSH PRIVILEGES;"
 
@@ -24,7 +24,7 @@ rm -f /var/spool/postfix/pid/master.pid
 /usr/sbin/postfix start
 
 echo "###### Start php-fpm"
-service php7.4-fpm start
+service php8.2-fpm start
 
 echo "###### Start nginx"
 service nginx start
